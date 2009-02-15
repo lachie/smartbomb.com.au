@@ -16,6 +16,8 @@ require __DIR__+'/lib/dirdb/dirdb'
 require 'ostruct'
 require 'pp'
 
+require __DIR__+'/lib/albino'
+
 class Post < OpenStruct
   include DirDB::Resource
   
@@ -41,8 +43,6 @@ class Post < OpenStruct
       end
     end
 
-    # info[:slug] = File.basename(path,'haml').sub(/^\d+_/,'').gsub('_',' ').gsub('.','')
-
     pt = info[:published_at] = if info[:published_at]
       DateTime.parse(info[:published_at])
     else
@@ -51,6 +51,8 @@ class Post < OpenStruct
 
     info[:url] = "/%04d/%02d/%s" % [ pt.year,pt.month,info[:slug] ]
     
+    # this is passed to initialize
+    # since we subclass OpenStruct this very neatly inits the fields using our hash
     [info]
   end
 
@@ -84,9 +86,6 @@ end
 helpers do
   include Haml::Helpers
 
-  def partial(name,options={})
-    haml(:"_#{name}", options.update(:layout => false))
-  end
 
   def thrown_content
     @thrown_content ||= Hash.new {|h,k| h[k] = ''}
@@ -102,6 +101,10 @@ helpers do
     thrown_content[name.to_sym]
   end
 
+  # pinched from tim
+  def partial(name,options={})
+    haml(:"_#{name}", options.update(:layout => false))
+  end
   def absoluteify_links(html)
     html.
       gsub(/href=(["'])(\/.*?)(["'])/, 'href=\1http://smartbomb.com.au\2\3').
@@ -135,6 +138,7 @@ get '/archives' do
   haml :archive
 end
 
+# redirect the old-style urls to new style urls, permanently
 get '/:year/:month/:day/:slug' do
   url = '/' + params.values_at(:year,:month,:slug).join('/')
   redirect url, 301
