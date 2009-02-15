@@ -1,0 +1,60 @@
+-# title: Does !array.empty? == array.any? ?
+-# slug: not-empty-any-arrays
+-# published_at: 2007-03-20 03:14:00
+
+
+:textile
+  h1. So why does @[].any? == ![].empty?@
+  
+  The underlying semantics of any? go
+  # start with the result being false
+  # iterate the array, switching the result to true if any elements are true
+  # return the result
+  
+  Consequently, if there are no elements at all false is returned.
+  
+  This means that @[].any?@ is false. Conveniently, this is the same result as @![].empty?@, but looks nicer.
+  
+  Unfortunately, Its only a coincidence that this degenerate case works. 
+  
+  --- ruby
+  ! [nil].empty?   #=> true
+  ! [false].empty? #=> true
+  [nil].any?       #=> false
+  [false].any?     #=> false
+  ---
+  
+  h1. a better solution
+  
+  Create a file @RAILS_ROOT/lib/array_ext.rb@.
+  
+  --- ruby
+  class Array
+    def full?
+      !empty?
+    end
+  end
+  ---
+  
+  If @full?@ is too optimistic for your tastes, choose another word. I thought @not_empty?@ sounded a bit crap.
+  
+  Now hook it from your environment:
+  --- ruby
+  require 'array_ext'
+  ---
+  
+  _Note_ that changes to this file won't auto-reload in development mode.
+  Restart your mongrels to see the change.
+  
+  Look! identical semantics:
+  --- ruby
+  ! [].empty?      #=> false
+  ! [nil].empty?   #=> true
+  ! [false].empty? #=> true
+  
+  [].full?         #=> false
+  [nil].full?      #=> true
+  [false].full?    #=> true
+  ---
+  
+  Its definitely going to be slower than @!empty?@, but it could make your code look a lot nicer.

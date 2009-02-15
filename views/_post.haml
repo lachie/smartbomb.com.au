@@ -1,0 +1,25 @@
+.entrytitle
+  %h2
+    %a{:href=>post.url}=post.title
+  %p.postdate=post.published_at.strftime('<em>%d</em><br/>%b')
+
+.entrybody
+  =post_html(post)
+
+.entrymeta
+  posted by
+  %strong Lachie
+  -#-unless post.tags.blank?
+  -#  |
+  -#  %strong tags
+  -#  \::
+  -#  =linked_tag_list(post.tags)
+
+  -# = link_to(pluralize(post.approved_comments.size, "archived comment")+", ", post_path(post, :anchor => 'comments'))
+  :javascript
+    var idcomments_acct = '7afed296a639a451a3f22b9175139517';
+    var idcomments_post_id; // = '#{post.slug}';
+    var idcomments_post_url = 'http://smartbomb.com.au#{post.url}#comments';
+  %script{:type=>"text/javascript", :src=>"http://www.intensedebate.com/js/genericLinkWrapperV2.js"}
+  
+

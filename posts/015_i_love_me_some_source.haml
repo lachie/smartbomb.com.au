@@ -1,0 +1,45 @@
+-# title: I love me some source
+-# slug: i-love-me-some-source
+-# published_at: 2008-02-01 12:42:00
+
+
+:textile
+  I don't know if its because I'm nosy, or because I'm a control freak, or perhaps both, but I really do like to read the source code. It occurs to me that this is probably why I feel so at home in the open source world.
+  
+  As much as I like something like Cocoa, it pains me not to be able to trace problems all the way down the stack. Even java solved this problem by shipping with its own source.
+  
+  Proclivities aside, I really like source, and am always looking for ways to make it easier to _get at_. @cd /usr/lib/ruby/gems/1.8/gems@ gets old quick.
+  
+  I started with this little _cough_ "gem from Dr Nic":http://drnic.tumblr.com/post/166472. Integrating it with my shell, I could now type
+  
+  ---
+  $ gems activerecord
+  ---
+  
+  and up pops the activerecord gem in Textmate. So some new releases of activerecord came out, and suddenly my naive script is giving me the old version. Without looking too far into it I added gem requirement support so that I could type
+  
+  ---
+  $ gems activerecord '>=2'
+  ---
+  
+  and get a recent activerecord in Textmate. As good as this is, I was really after something with _less typing_ and smarter pants. Well tonight I cracked it and I thought I'd open the source:
+  
+  --- ruby
+  #!/usr/bin/env ruby
+  
+  require ENV['TM_SUPPORT_PATH']+"/lib/ui"
+  require 'rubygems'
+  
+  gems = Gem.source_index.latest_specs.collect {|spec| spec.full_name}.sort
+  
+  TextMate::UI.request_item(:title => 'open a gem', :items => gems) do |selected_gem|
+    gem_path = Gem.source_index.specification(selected_gem).full_gem_path
+    %x{open -a TextMate \#{gem_path}}
+  end
+  ---
+  
+  Honestly, that's it! Bung that in a command using Textmate's Bundle Editor and assign it a key (I gave it cmd-shift-G, as I don't regularly search backwards).
+  
+  !http://smartbomb.com.au/assets/2008/2/1/open_a_gem-1.jpg!
+  
+  Double click on one and you're golden... neat.

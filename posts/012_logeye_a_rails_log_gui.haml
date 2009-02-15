@@ -1,0 +1,54 @@
+-# title: Logeye - a rails log gui
+-# slug: logeye-a-rails-log-gui
+-# published_at: 2007-09-16 04:40:00
+
+
+:textile
+  The Rails log is a very valuable resource. It contains a lot of information and its relatively easy to read.
+  
+  However, I find that It doesn't take long to get pretty sick of scrolling around, visually decoding, not to mention that the ansi covered SQL is a pain.
+  
+  Logeye is my itch-scratcher to make it better and more useful. You point it at either your RAILS_ROOT or directly at a log file, and watch the requests flow past as you develop your app.
+  
+  <a href="http://www.flickr.com/photos/lachie/1406167948/" title="Photo Sharing"><img src="http://farm2.static.flickr.com/1430/1406167948_57c8d136dd.jpg" width="380" height="500" alt="logeye 0.3.5 screenshot" /></a>
+  
+  h1.  Download
+  
+  <a href="http://rails-oceania.googlecode.com/files/Logeye-0.3.6.zip"><img src="http://blog.smartbomb.com.au/assets/2007/9/16/icon_128.jpg" width="128" height="128" alt="logeye icon" /><br/>
+  Logeye 0.3.6</a>
+  
+  h1. Features and problems
+  
+  * In the open dialog you select @RAILS_ROOT@, not the log file itself.
+  * Double click a log entry to open the corresponding controller file in your editor (set in preferences)
+  * You can set window alpha, and make the windows float above other apps (set in preferences)
+  * The zoom + does something useful. 
+  
+  h1. Upcoming Features
+  
+  * filtering, searching
+  * -smarter opening.-
+  * refined log details view with visual distinction for each kind of line.
+  * easy copying of SQL.
+  * easy opening of files referred to in backtraces.
+  * backtrace filtering.
+  
+  h1. update 1 2007/08/19
+  
+  Released Logeye 0.3
+  
+  changes:
+  * refined look
+  * ability to open log files directly
+  * parsing of intra-request fluff
+  
+  h1. update 2 2007/08/19
+  
+  Released Logeye 0.3.5
+  
+  changes:
+  * now opens nested controllers
+  * it remembers which logs it was tailing last time you had it open and reopens them
+  * more looks
+  
+  Logeye 0.3.6 is a minor bugfix

@@ -1,0 +1,35 @@
+-# title: Merb tips
+-# slug: merb-tips
+-# published_at: 2008-02-19 06:55:00
+
+
+:textile
+  So there's only one at the moment, but i really wanted to write this down:
+  
+  h1. 0.5.x make the development logger log DEBUG messages...
+  
+  Put this in @Merb.root/config/environments/development.yml@
+  
+  --- yaml
+  :log_level: DEBUG
+  ---
+  
+  h1. 0.9.x freezing gems
+  
+  The way of installing the latest merb release is 
+  --- bash
+  $ cd to/your/app
+  $ gem install merb -i gems --source=http://merbivore.com
+  ---
+  
+  Unfortunately, this command won't install merb's dependencies as it won't be able to look inside the normal gems repository on rubyforge.  
+  
+  This should do the trick though
+  --- bash
+  $ cd to/your/app
+  $ gem install merb -i gems --source=http://merbivore.com --source=http://gems.rubyforge.org
+  ---
+  
+  Yay!
+  
+  (Note that this is only a problem while the merb gems aren't pushed to rubyforge).

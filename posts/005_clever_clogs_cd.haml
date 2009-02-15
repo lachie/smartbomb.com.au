@@ -1,0 +1,59 @@
+-# title: Clever Clogs cd
+-# slug: clever-clogs-cd
+-# published_at: 2007-03-20 03:39:00
+
+
+:textile
+  In your $HOME/.bashrc
+  
+  <pre><code>
+  # make sure you do this. If you don't, kittens may die
+  # and on OS X textmate might stop working proper-like
+  if [[ $- != *i* ]] ; then
+    # Shell is non-interactive.  Be done now!
+    return
+  fi
+  
+  function cd () {
+    local goto=$*
+  
+    if [[ $# == 0 ]]; then
+      if [[ "$(pwd)" =~ "^${HOME}/dev/([^\/]+)" ]]; then
+        goto="${HOME}/dev/${BASH_REMATCH[1]}"
+  
+      elif [[ ! ( $(pwd) =~ "^${HOME}" ) ]]; then
+        goto=`cat ~/.lastpwd`
+  
+      else
+        goto=$HOME
+      fi
+    fi
+  
+    builtin cd "$goto"
+  
+    if [[ "$(pwd)" =~ "^${HOME}" ]]; then
+      pwd > ~/.lastpwd
+    fi
+  }
+  
+  builtin cd `cat ~/.lastpwd`
+  
+  </code></pre>
+  
+  h2. Rules
+  
+  I'm still mucking around with the rules, but here they are at the moment:
+  
+  h3. open a new shell
+  
+  Change to the last directory you were in under $HOME.
+  
+  h3. type @cd dirname@
+  
+  Changes to that directory as normal. If the directory is within $HOME, record it.
+  
+  h3. type @cd@ (no args)
+  
+  * If you're somewhere below $HOME/dev/projectname, change to $HOME/dev/projectname
+  * If you're somewhere else under $HOME, cd $HOME
+  * If you're outside of $HOME, change back to the last directory you were in under $HOME

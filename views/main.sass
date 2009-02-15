@@ -1,0 +1,284 @@
+html
+  :height 100%
+
+
+body
+  :height 100%
+  :background #fff url(../images/bg.png) repeat-x
+  :font-family Verdana,"Lucida Grande","Helvetica Neue",Helvetica,sans-serif
+  :font-size 12px
+  :line-height 1.5
+  :margin 0
+  :padding 0
+  :text-align center
+
+
+#wrap
+  :margin 0 auto
+  :text-align left
+  :width 76em
+  :position relative
+  :min-height 97%
+
+
+#content
+  :font-size 1.0em
+  :float left
+  :padding 3em 1em 1em 0
+  :width 40em
+
+  h1
+    :font-size 1.6em
+
+  h2
+    :font-size 1.4em
+
+  h3
+    :font-size 1.2em
+
+
+#sidebar
+  :border-left 1px #eee solid
+  :border-bottom 1px #eee solid
+  :font-size 1.1em
+  :float right
+  :padding 3em 0 2em 1em
+  :width 20em
+  :background #fefefe
+
+  h2
+    :margin-top 1em
+    :color #555
+    :font-size 1.3333333333333333em
+
+  ul
+    :list-style-type none
+    :margin 0
+    :padding 0
+
+    li
+      :border-bottom 1px dotted #ddd
+      :margin-bottom 0.3em
+      :padding 0.3em
+
+
+#header
+  :height 171px
+
+  .title
+    :position relative
+    :left -120px
+
+  h1
+    :font-family Georgia, "Times New Roman", Times, serif
+    :font-size 3em
+    :margin 0
+    :margin-right 1em
+
+    a
+      :color #E87830
+
+      &:hover
+        :color #CC0000
+
+  p
+    :color #aaa
+    :font-size 1.1em
+    :margin 0
+    :margin-top -0.5em
+
+
+#footer
+  :border-top 2px solid #444
+  :background #241513
+  :color #aaa
+  :clear both
+  :font-size 0.9em
+  :padding 0.5em 0
+
+
+img
+  :border none
+
+
+h1, h2
+  :font-family Tahoma, Verdana, Arial, Helvetica, sans-serif
+  :font-weight normal
+  :letter-spacing -1px
+  :margin 0
+
+
+h3
+  :font-family Tahoma, Verdana, Arial, Helvetica, sans-serif
+  :font-weight normal
+  :letter-spacing -1px
+  :margin 0
+
+  &#comments
+    :font-size 1.6em
+
+
+.entrytitle
+  h2
+    :font-size 1.8em
+    :line-height 1em
+    :margin-bottom 0 0 1em 0
+
+    a
+      :color #aa5555
+      :font-size 1.4em
+
+      &:hover
+        :color #58BBEB
+
+  .postdate
+    :margin 0 0 0 -4em
+    :position absolute
+    :left 0pt
+    :top 0pt
+    :text-align center
+    :background url(/images/postdate.png) no-repeat scroll right top
+    :padding 0.2em 0.45em
+    :height 56px
+    :color #fff
+    :font-size 1.2em
+
+    em
+      :font-size 1.3em
+      :font-style normal
+
+
+.entrybody
+  h1
+    :font-size 1.3333333333333333em
+    :line-height 1.125em
+    :margin 0 0 1.125em 0
+    :color #962010
+
+  h2
+    :font-size 1.1666666666666667em
+    :line-height 1.2857142857142858em
+    :margin 0 0 1.2857142857142858em 0
+    :font-size 1em
+  line-height: 1.5em
+  margin: 0 0 1.5em 0
+    :color #962010
+
+  h3
+    :color #962010
+
+
+.entry
+  :margin-bottom 3em
+  :position relative
+
+
+.entrymeta
+  :border-top 1px solid #aa5555
+  :font-size 0.9em
+
+
+.postedby
+  :padding 3px
+  :padding-left 20px
+
+
+.commentslink
+  :padding 3px 3px 3px 0
+
+
+.commentsblock
+  :margin 0.5em
+  :padding 1em
+
+  textarea
+    :width 35em
+
+    &:focus
+      :background #eee
+      :border 1px solid #a1a1a1
+      :background #eee
+      :border 1px solid #a1a1a1
+
+  input
+    :border 1px solid #d1d1d1
+
+    &:focus
+      :background #eee
+      :border 1px solid #a1a1a1
+
+  textare a
+    :border 1px solid #d1d1d1
+
+
+.commentauthor
+  :display block
+  :font-size 1.5em
+
+
+ol.commentlist
+  :color #777
+  :font-size 0.9em
+  :list-style-type none
+  :margin 0
+  :margin-top 1.5em
+  :padding 0
+
+
+.commentlist li
+  :margin-bottom 0.5em
+  :padding 0.5em 1em
+
+
+.alt
+  :background #f3f3f3
+  :border 1px dotted #d1d1d1
+  :padding 0.5em
+
+
+a
+  :color #0873B6
+  :text-decoration none
+
+  &:hover
+    :color #CC0000
+
+  img
+    :border none
+
+
+.highlighttable
+  :background #eee
+  :border 1px solid #aaa
+
+  tr
+    :overflow hidden
+
+  .linenos
+    :background #fff
+    :padding 0 .5em 0 1em
+
+  .code
+    :padding 0 1em
+
+
+fieldset.toc
+  :float right
+  :border dotted 1px black
+  :background-color #fafafa
+  :padding 10px
+  :margin-left 5px
+
+
+.toc
+  legend
+    :font-weight bold
+
+  ol
+    :margin 0px
+    :padding-left 0px
+    :list-style-position inside
+
+    ol
+      :list-style-type lower-alpha
+      :padding-left 15px

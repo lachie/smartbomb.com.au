@@ -1,0 +1,16 @@
+-@title = @post.title
+
+- throw_content(:sidebar) do
+  %h2 Recent
+  %ul
+    -@posts.each do |post|
+      %li
+        %small
+          =post.published_at.strftime('%d %b %y')
+        %a{:href=>post.url}=post.title
+    %li
+      %a{:href=>'/archives'} more posts...
+        
+
+.post.entry{:class => "post-#{@latest_post.id}"}
+  =partial 'post', :locals => {:post => @post}

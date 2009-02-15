@@ -1,0 +1,45 @@
+-# title: dd done right
+-# slug: dd-done-right
+-# published_at: 2007-02-12 10:52:00
+
+
+:textile
+  First, get a "Knoppix":knoppix.org iso and burn it. Your ISP might mirror knoppix as mine does.
+  
+  I've got 2 external firewire/USB2 discs, one NTFS, one HFS+. 
+  * NTFS is pretty useless until "ntfs-3g":ntfs-3g.org matures and is included in knoppix.
+  * HFS+ is fully supported by the kernel, if journalling is switched off.
+  
+  When Knoppix has booted, plug in your external disc. By default, Knoppix can't seem to mount HFS+ automatically. Run @dmesg@ and examine the last few lines to discover what device your external disc is known as--usually an emulated @scsi@, such as @/dev/sda@.
+  
+  Now,
+  <pre>
+    $ sudo modprobe hfsplus
+    $ mkdir external
+    $ sudo mount -t hfsplus /dev/sda ./external
+    $ cd external
+  </pre>
+  
+  Up til now, I've always used @dd@ to copy the bits. Say these target disc is called /dev/hda.
+  <pre>
+    $ dd if=/dev/hda of=saviour.img
+  </pre>
+  
+  The default blocksize is 512 bytes. Apparently its more reliable in the face of disc errors, but slow. So you can specify a larger blocksize:
+  <pre>
+    $ dd if=/dev/hda of=saviour.img bs=4k
+  </pre>
+  
+  Have you used @dd@ before? Its really quite an old school unix command: it stops on errors, and gives absolutely no progress feedback.
+  
+  Tonight I discovered "dd_rescue":http://www.garloff.de/kurt/linux/ddrescue/. @dd_rescue@ improves on @dd@ in a number of ways: its blocksize strategy is smarter (so its faster), it can handle errors, and most importantly it provides copious stats on what its doing.
+  
+  And its there by default on Knoppix:
+  <pre>
+    $ dd_rescue /dev/hda ./saviour.img
+  </pre>
+  
+  (There exists a wrapper for dd_rescue, "dd_rhelp":http://www.kalysto.org/utilities/dd_rhelp/index.en.html. Knoppix didn't have it so I settled for @dd_rescue@)
+  
+  While I hope it makes your life easier,
+  I sincerely hope you never have a use for this information :)

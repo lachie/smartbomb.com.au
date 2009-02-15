@@ -1,0 +1,106 @@
+-# title: airbed: making camping restful.
+-# slug: airbed-making-camping-restful
+-# published_at: 2007-08-11 12:39:00
+
+
+:textile
+  First of all, Airbed performs a task similar to Rails' RESTful routes. That is, requests made with HTTP verbs (GET, POST, PUT and DELETE) are mapped onto the CRUDdy actions: list, show, create, update, delete, plus those two also-rans new and edit (sort of).
+  
+  The CRUDdy actions all have default implementations, using naming conventions to make it fly. To make overriding the defaults generally unnecessary, options can be passed, and various hooks are called during processing.
+  
+  PUT and DELETE are not commonly supported by browsers: they're faked in more or less the same way that Rails does, by adding a _verb parameter to requests.
+  
+  h2. a simple example
+  
+  The doco is coming along as the behaviour's being refined, but for now a simplified example is most eloquent. The full example is in airbed at @examples/faces.rb@
+  
+  --- ruby
+  Camping.goes :Faces
+  
+  module Faces
+    module Models
+      class Person < Base; end
+    end
+    
+    module Controllers
+      include Airbed::Resources
+      
+      class Index < R '/'
+        def get
+          redirect People
+        end
+      end
+      
+      class People < Resource Models::Person
+        def after_modification(instance)
+          redirect(People)
+        end
+      end
+    end
+  end
+  ---
+  
+  View names are also inferred from naming conventions:
+  
+  --- ruby
+  module Faces
+    module Views
+      # TODO make this work by including Airbed::Views
+      def form(options={})
+        verb = method = options[:method] || :post
+        options[:method] = :post unless [:get,:post].include? method.to_sym
+      
+        tag!(:form, options) {
+          input(:type => 'hidden', :name => '_verb', :value => verb)
+          yield
+        }
+      end
+      
+      def _button(text,href,method=:post)
+        form(:action => href, :method => method) {
+          input :type => 'submit', :value => text
+        }
+      end
+      
+      def list_people
+        h1 'ppl!'
+        ul {
+          @people.each {|person|
+            li { a person.name, :href => R(People,person) }
+            _button('x',R(People,person),:delete)
+          }
+        }
+        
+        form( :action => R(People), :method => 'post') {
+          input :name => 'person[name]'
+          input :type => 'submit', :value => '+'
+        }
+      end
+      
+      def show_person
+        h1 @person.name
+        
+        form(:action => R(People,@person), :method => :put) {
+          input :name => 'person[name]', :value => @person.name
+          input :type => 'submit', :value => 'save'
+        }
+        a(:href => R(People)) {"&larr; people"}
+      end
+    end
+  end
+  ---
+  
+  h2. gimme
+  
+  Install with 
+  ---
+  sudo gem install airbed
+  ---
+  
+  or fetch head from
+  
+  ---
+  svn co http://rails-oceania.rubyforge.org/svn/airbed/trunk/
+  ---
+  
+  The code is pretty new and shiny, so feedback in eminently welcome. Write some specs if you feel the inclination.

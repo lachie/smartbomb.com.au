@@ -1,0 +1,239 @@
+-# title: Ruby OO for C developers - part 1 Basic Modeling in OO
+-# slug: ruby-oo-for-c-devs-part1
+-# published_at: 2007-08-06 12:12:00
+
+
+:textile
+  h1. Baby steps
+  
+  We're going to model TV channels.
+  
+  Our TV channels are viewed using a sophisticated set top box device. From a technical perspective, the box needs a few pieces of information about channels in order to tune to them and show them to the viewer.
+  
+  * the name of the channel.
+  * the channel number.
+  * some data to pass to the underlying hardware to tune to the channel.
+  
+  Viewers can tune to a channel by choosing it from a graphical menu.
+  
+  h2. C
+  
+  h3. structure
+  
+  In C-land, we give form to blobs of memory using structs. A struct defines the shape of a Channel when its allocated in memory.
+  
+  --- c
+  typedef struct {
+    char *name;
+    int number
+    int tuning_info[3];
+  } Channel;
+  ---
+  
+  h3. allocation
+  
+  To make a real channel from the struct, we allocate it some memory and initialise its information.
+  
+  --- c
+  Channel *channel_v = (Channel *)malloc(sizeof(Channel));
+  
+  channel_v->name = "Channel V";
+  channel_v->number = 801;
+  channel_v->tuning_info[0] = 4096;
+  channel_v->tuning_info[1] = 0;
+  channel_v->tuning_info[2] = 123;
+  ---
+  
+  @channel_v@ is now pointing to an instance of the Channel struct.
+  
+  Note that @channel_v@ is only known to be shaped like a Channel struct at compile time. Once the code is running, the program has no knowledge of this shape.
+  
+  Using the information stored in an instance is easy:
+  
+  --- c
+  printf("Channel: %s\n", channel_v->name);
+  // output: Channel: Channel V
+  ---
+  
+  h3. verbs
+  
+  Now we have our data sorted out, let's define some functions that do something with instances of the Channel struct.
+  
+  --- c
+  void channel_tune(Channel *channel) {
+    viewer_notify("Tuning to channel %s", channel->name);
+    box_tune_to(channel->tuning_info[0], channel->tuning_info[1], channel->tuning_info[2]);
+  }
+  ---
+  
+  To perform the action "Tune to channel V" :
+  
+  --- c
+  channel_tune(channel_v);
+  ---
+  
+  h3. struct verbs
+  
+  Here's a function for reading a database file and creating a list of Channel instances:
+  
+  --- c
+  Channel **channel_load_from_file(char *filename) {
+    ...
+  }
+  ---
+  
+  This function doesn't take a Channel instance to work on. Instead, it returns a list of Channel instances. 
+  You could view this function as working with knowledge of the Channel struct in order to produce its Channel instances.
+  
+  
+  Now lets build the same thing in Ruby...
+  
+  h2. Ruby
+  
+  h3. structure
+  
+  In Ruby-land, classes define the shape of data. In object oriented circles, the shape is called the *interface*, because the data itself is not directly accessible (later on, we'll learn that this concept is called *encapsulation*).
+  
+  --- ruby
+  class Channel
+    def name
+      @name
+    end
+    
+    def name=(name)
+      @name = name
+    end
+    
+    def number
+      @number
+    end
+    
+    def number=(num)
+      @number = num
+    end
+    
+    def tuning_info
+      @tuning_info
+    end
+    
+    def tuning_info=(tuning_info)
+      @tuning_info = tuning_info
+    end
+  end
+  ---
+  
+  Yuk, that's a heap of code to do not much at all. It does expose a pile of Ruby concepts to dig through.
+  
+  First of all, functions associated with a class are known as methods. They are like functions which automatically work on instances of the class, or the class itself.
+  
+  The methods defined above are called *instance methods*, as they only work on instances of Channel.
+  
+  These methods are called accessors --getters and setters --because all they do is get and set the data inside an instance.
+  
+  You may have heard that one of Ruby's principles is "don't repeat yourself" (or DRY). Luckily, we can rewrite all this repetitive code much more succinctly:
+  
+  
+  --- ruby
+  class Channel
+    attr_accessor :name, :number, :tuning_info
+  end
+  ---
+  
+  
+  h3. allocation
+  
+  Channel objects are allocated (or *instantiated*) using the new method of the Channel class.
+  
+  --- ruby
+  channel_v = Channel.new
+  
+  channel_v.name        = "Channel V"
+  channel_v.number      = 801
+  channel_v.tuning_info = [4096,0,123]
+  ---
+  
+  At this point the @channel_v@ variable holds a Channel object. It retains complete knowledge of its structure and place in the hierarchy:
+  
+  --- ruby
+  channel_v.class # => Channel
+  channel_v.instance_variables # => ["@number", "@name", "@tuning_info"]
+  ---
+  
+  This rich reflection information is very useful in many advanced techniques, collectively known as metaprogramming.
+  
+  h3. verbs
+  
+  Guess what we use to get things done with Objects and Classes? Yes, right, methods.
+  
+  --- ruby
+  class Channel
+    attr_accessor :name, :number, :tuning_info
+    
+    def tune
+      Viewer.notify("Tuning to channel #{@name}")
+      Box.tune_to(self.tuning_info)
+    end
+  end
+  ---
+  
+  To tune to Channel V, we call the tune method on the channel_v instance:
+  
+  --- ruby
+  channel_v.tune
+  ---
+  
+  
+  h3. an aside on variables
+  
+  Since we've seen a little bit of Ruby code by now, you might have noticed some odd things about the variables.
+  Ruby has a few different kinds of variables and uses a couple of sigils to differentiate their type.
+  
+  h4. local variables
+  
+  Local variables are only visible within the current scope, and any subscopes. They are written as *variable* (i.e. lower case with underscores)
+  
+  Note that while and for loops don't introduce new scope in Ruby! Blocks do.
+  
+  h4. instance variables
+  
+  Instance variables are variables associated with an instance of a class. They're visible anywhere within the instance, but not from the outside. They're somewhat analogous to struct members, except for the encapsulation aspect (don't worry, we'll talk about it...).
+  
+  They are written *@variable* (i.e. like a local variable preceded by an 'at').
+  
+  h4. others
+  
+  Constants are visible within the current module scope and are written as *Constant* or *CONSTANT*
+  
+  Globals are visible anywhere within the current ruby interpreter, and are written as *$global*
+  
+  h4. self
+  
+  Did you notice the use of the word @self@ in the example above? @self@ is a special built in variable which refers to the instance for which the method is defined (In this case it wasn't strictly required, however sometimes its necessary for disambiguation or to take advantage of encapsulation).
+  
+  h3. class verbs
+  
+  Methods which act on the class rather than instances of the class are called class methods (or singleton methods). In the method @Channel#tune@ above, @Viewer.notify@ and @Box.tune_to@ are singleton methods.
+  
+  Let's define a class method for Channel which reads records from a text file and returns a list of Channel objects.
+  
+  --- ruby
+  class Channel
+    def self.load_from_file(file)
+      ...
+    end
+  end
+  ---
+  
+  The class method is called directly on the class:
+  
+  --- ruby
+  channels = Channel.load_from_file("channels.txt")
+  ---
+  
+  h1. Bye till next time
+  
+  Up to this point there's not much difference between the structure of the C and Ruby versions.
+  
+  In the next post, I'll take OO modeling to the next logical step of inheritance. The true utility of OO will become much clearer.
+  
+  I hope you've found the journey interesting so far--feedback is always welcome.

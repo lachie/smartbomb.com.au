@@ -1,0 +1,116 @@
+-# title: Hornsby
+-# slug: hornsby
+-# published_at: 2007-08-29 04:49:00
+
+
+:textile
+  Scenarios look like:
+  
+  --- ruby
+  scenario :apple do
+    @apple = Fruit.create! :species => 'apple'
+  end
+  
+  scenario :orange do
+    @orange = Fruit.create! :species => 'orange'
+  end
+  
+  scenario :fruitbowl => [:apple,:orange] do
+    @fruitbowl = FruitBowl.create! :fruit => [@apple,@orange]
+  end
+  
+  scenario :kitchen => :fruitbowl do
+    @kitchen = Kitchen.create! :fruitbowl => @fruitbowl
+  end
+  ---
+  
+  By default, these are loaded from @RAILS_ROOT/spec/hornsby_scenarios.rb@
+  
+  ...and you use them in specs like:
+  
+  --- ruby
+  describe Fruit, "@apple" do
+    before do
+      hornsby_scenario :apple
+    end
+    
+    it "should be an apple" do
+      @apple.species.should == 'apple'
+    end
+  end
+  
+  describe FruitBowl, "with and apple and an orange" do
+    before do
+      hornsby_scenario :fruitbowl
+    end
+    
+    it "should have 2 fruits" do
+      @fruitbowl.should have(2).fruit
+    end
+  end
+  ---
+  
+  h1. Setup
+  
+  Install the plugin:
+  
+  <pre><code>
+  ./script/plugin install http://rails-oceania.googlecode.com/svn/lachiecox/hornsby
+  </code></pre>
+  
+  Or piston:
+  
+  <pre><code>
+  piston import http://rails-oceania.googlecode.com/svn/lachiecox/hornsby vendor/plugins/hornsby
+  </code></pre>
+  
+  Add the following to @spec_helper.rb@
+  
+  --- ruby
+  # by default this loads scenarios from RAILS_ROOT/spec/hornsby_scenarios.rb
+  Hornsby.load
+  
+  Spec::Runner.configure do |config|
+    ...
+    
+    config.include(HornsbySpecHelper)
+  end
+  ---
+  
+  
+  h1. Advanced Usage
+  
+  Its just ruby, right? So go nuts:
+  
+  --- ruby
+  1.upto(9) do |i|
+    scenario("user_\#{i}") do
+      user = User.create! :name => "user\#{i}"
+      instance_variable_set("@user_\#{i}",user)
+    end
+  end
+  ---
+  
+  h1. Rake
+  
+  If you'd like simply to load your scenarios into a database, use the rake task like so:
+  
+  <pre><code>
+  $ rake hornsby:scenario RAILS_ENV=test SCENARIO=fruitbowl
+  </code></pre>
+  
+  h1. TODO
+  
+  * Make transactional for speed.
+  * Add scenario namespaces for better organisation.
+  * Detect scenario cycles.
+  
+  h1. Credits
+  
+  "Lachie Cox":mailto:lachie@smartbomb.com.au
+  
+  The code is based on Err's code found in "this post":http://errtheblog.com/post/7708
+  
+  h1. License
+  
+  MIT, see LICENCE

@@ -1,0 +1,39 @@
+-# title: serve a directory
+-# slug: serve-a-directory
+-# published_at: 2006-11-19 14:18:00
+
+
+:textile
+  Temporarily serve any directory via HTTP, with nice handling of privileged ports.
+  
+  Put the following on your path in a file @srv@. Make it executable.
+  
+  Then, just go to the directory you want and run @srv@
+  
+  --- ruby
+  #!/usr/bin/ruby
+  
+  port = ARGV[0] || '80'
+  
+  if port != 'sudo' and port.to_i < 1000
+    puts "trying privileged port \#{port} with sudo"
+    exec "sudo \#{$0} sudo \#{port}"
+  end
+  
+  if port == 'sudo'
+    port = ARGV[1]
+  end
+  
+  require 'webrick'
+  include WEBrick
+  
+  s = HTTPServer.new(
+    :Port            => port,
+    :DocumentRoot    => Dir::pwd
+  )
+  
+  s.mount("/", HTTPServlet::FileHandler, Dir::pwd, true)
+  
+  trap("INT"){ s.shutdown }
+  s.start
+  ---

@@ -1,0 +1,64 @@
+-# title: de-bulk your gem threshold
+-# slug: de-bulk-your-gem-threshold
+-# published_at: 2008-01-27 02:33:00
+
+
+:textile
+  At "Jelly Sydney":http://workatjelly.com/ last Friday, I went to see if my "merb":http://merbivore.com gems were up to date. You know:
+  
+  --- bash
+  $ gem list --remote
+  
+  *** REMOTE GEMS ***
+  
+  Updating metadata for 114 gems from http://gems.rubyforge.org
+  ...
+  ---
+  
+  Each dot was taking aages, and there were to be one hundred and fourteen of the blighters!
+  
+  h2. In a nutshell
+  
+  The rubygem server seemed to be having issues serving up incremental metadata. Until the rubygems server got back on its feet, I set my bulk threshold to a lower value:
+  
+  --- bash
+  echo :bulk_threshold: 1 >> ~/.gemrc
+  ---
+  
+  I won't leave it there, because it could impact the overall rubygem system's performance (well maybe if everyone decided to do this all the time).
+  
+  h2. Detailure
+  
+  There were about seven peoples on the "NerfPalace Wifi":http://nerfpalace.org/ by this stage, so it was only natural to ask:
+  
+  Lachie: "Hey "Tim":http://toolmantim.com, is the network slow?"
+  
+  Tim: "Nah aah, girlfriend. You slow. Or yo gems are slow, biatch."
+  
+  Well! It turns out that Tim had noticed the same thing and had started digging into the very source code of gems in search of an answer.
+  
+  h2. Teh Pwobwem
+  
+  In order not to overtax the rubygem servers' bandwidth, gem first finds out how many of its cached metadata are out of date. If the number is greater than an arbitrary threshold, it performs a bulk update in which *all* the metadata is updated at once.
+  
+  If the number is below the threshold, each metadatum is fetched and updated individually (*incrementally* you might say).
+  
+  By default, this number is 1000. Say each update was taking a second and there were 999 gems to update, this process would take more than a quarter of an hour. Presumably the average case is much better than this, but on Friday, each increment of the update was taking _forever_. 
+  
+  The complete source_cache is currently ~850k gzipped. Although in aggregate this could cost the rubygems people a fair bit of bandwidth, it would never take 15 minutes on today's broadband.
+  
+  What we needed was some way of forcing the bulk update, which at the time was much faster than the alternative. The mechanism for this is not very clear, so we got by by hacking the code.
+  
+  h2. HOWTO
+  
+  Thankfully, there is a better way or changing the threhold! Although its not well documented or, well, documented at all, you can set the @bulk_threshold@ variable in the .gemrc file kept in your home directory. Its YAML, y'know:
+  
+  --- yaml
+  :bulk_threshold: 1
+  ---
+  
+  See that colon out the front of the bulk_threshold key? Its because its a symbol once it gets inside the ruby.
+  
+  As I mentioned above, its probably not good manners to leave your threshold at 1, since the authors have built the system in a certain way (even if its not always optimal) and we're not paying the rubygem bandwidth fees. Just think, it'd be terrible for The Authors to chuck a Zed and shut rubygems down!
+  
+  Hooray for Rubygems!

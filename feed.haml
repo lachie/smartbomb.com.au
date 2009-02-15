@@ -1,0 +1,24 @@
+!!! xml
+%feed{:xmlns => "http://www.w3.org/2005/Atom"}
+ 
+  %title smartbomb articles
+  %link{:href => "http://feeds.feedburner.com/Smartbomb", :rel => "self", :hreflang => "en", :type => "application/atom+xml"}/
+  %link{:href => "http://smartbomb.com.au", :rel => "alternate", :hreflang => "en", :type => "text/html"}/
+   
+  %author
+    %name Lachie Cox
+    %uri http://smartbomb.com.au/
+    %email lachie@smartbomb.com.au
+
+  %id tag:smartbomb.com.au,2009-02-15:/
+  %updated= @posts.first.published_at.xmlschema
+
+  - for post in @posts
+    %entry
+      %id== tag:smartbomb.com.au,2009-02-15:#{post.url}
+      %title{:type => "html"}= strip_tags(post.title)
+      %published= post.published_at.xmlschema
+      %updated= (post.updated_at || post.published_at).xmlschema
+      %link{:href => "http://smartbomb.com.au#{post.url}", :rel => "alternate", :hreflang => "en", :type => "text/html"}/
+      %content{:type => "xhtml", "xml:lang"=>"en", "xml:base"=>"http://smartbomb.com.au/"}
+        %div{:xmlns => "http://www.w3.org/1999/xhtml"}= absoluteify_links(post_html(post))
