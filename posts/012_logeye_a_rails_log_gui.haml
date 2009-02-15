@@ -1,6 +1,8 @@
 -# title: Logeye - a rails log gui
 -# slug: logeye-a-rails-log-gui
 -# published_at: 2007-09-16 04:40:00
+-# updated_at: 2008-09-01 18:05:37
+-# archived_comments: 1
 
 
 :textile
@@ -52,3 +54,18 @@
   * more looks
   
   Logeye 0.3.6 is a minor bugfix
+
+-throw_content(:archived_comments) do
+  %h3 archived comments
+
+  .commentsblock
+    %ol.commenlist
+      %li
+        %cite Jay Levitt says:
+        %br/
+        :plain
+          I was just thinking how strange it was that Rails developers love Macs, that Rails uses helpful ANSI color codes in its logs, that Console.app can't parse ANSI color codes, and that nobody'd written something like this.  And then you did!<br />
+          <br />
+          I'm not sure if 0.4 works with Rails 2.x yet, but I might play with it... problem: I have no idea how to build a RubyCocoa app.  I'm new to git as well.  I did a &quot;git clone&quot; of the source, then ran rake, and saw that it tries to use svn a few times.<br />
+          <br />
+          Any tips on the right workflow to build this?  Should I just ignore the github repository, and use the svn from Google Code?  Is the Rakefile outdated?  

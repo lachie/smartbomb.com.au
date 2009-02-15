@@ -93,10 +93,12 @@ helpers do
   end
 
   def throw_content(name,&block)
+    $stdout.puts "throwing content #{name}"
     thrown_content[name.to_sym] << capture_haml(&block)
   end
 
   def catch_content(name)
+    $stdout.puts "catching content #{name}"
     thrown_content[name.to_sym]
   end
 
@@ -113,6 +115,8 @@ helpers do
   end
 
 end
+
+# serving, ac-tually
 
 get '/' do
   @post = Post.all(:by_published_at).last

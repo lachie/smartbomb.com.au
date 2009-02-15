@@ -1,6 +1,8 @@
 -# title: I love me some source
 -# slug: i-love-me-some-source
 -# published_at: 2008-02-01 12:42:00
+-# updated_at: 2008-09-01 18:05:39
+-# archived_comments: 9
 
 
 :textile
@@ -43,3 +45,62 @@
   !http://smartbomb.com.au/assets/2008/2/1/open_a_gem-1.jpg!
   
   Double click on one and you're golden... neat.
+
+-throw_content(:archived_comments) do
+  %h3 archived comments
+
+  .commentsblock
+    %ol.commenlist
+      %li
+        %cite Dr Nic says:
+        %br/
+        :plain
+          Nice UI.<br />
+          <br />
+          I later integrated that pastie into a gem find_gem.<br />
+          <br />
+          Has two command-line apps: find_gem name, and edit_gem name; the later opening up the gem into TextMate etc.<br />
+          <br />
+          Also has some nice autocompletions for bash if you look in the readme, I think.
+      %li.alt
+        %cite cammo says:
+        %br/
+        :plain
+          Wicked! I will be using this alot!
+      %li
+        %cite Marc Jeanson says:
+        %br/
+        :plain
+          Nice work!
+      %li.alt
+        %cite Marc Jeanson says:
+        %br/
+        :plain
+          Nice work!
+      %li
+        %cite Evan Light says:
+        %br/
+        :plain
+          Cool.  While tiny, why not make it into a gem as well?  Or perhaps hand it off to Giles Bowkett and make it part of the utility_belt gem.  Seems appropriate for it.
+      %li.alt
+        %cite Evan Light says:
+        %br/
+        :plain
+          Ok, forget what I said about utility_belt integration; it's focused on IRB enhancements.  This is a command line enhancement.
+      %li
+        %cite Daniel De Aguiar says:
+        %br/
+        :plain
+          Great post. This is really helpful!
+      %li.alt
+        %cite Lee says:
+        %br/
+        :plain
+          You might want to check out my little gem called gemedit, which allows gems to be opened in any editor and has command line completion.<br />
+          <br />
+          http://gemedit.rubyforge.org/
+      %li
+        %cite Dave Newman says:
+        %br/
+        :plain
+          Sweeeeeeeeeeeeeeeeet

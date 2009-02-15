@@ -1,6 +1,8 @@
 -# title: Ruby OO for C developers - part 1 Basic Modeling in OO
 -# slug: ruby-oo-for-c-devs-part1
 -# published_at: 2007-08-06 12:12:00
+-# updated_at: 2008-09-01 18:05:34
+-# archived_comments: 1
 
 
 :textile
@@ -170,7 +172,7 @@
     attr_accessor :name, :number, :tuning_info
     
     def tune
-      Viewer.notify("Tuning to channel #{@name}")
+      Viewer.notify("Tuning to channel \#{@name}")
       Box.tune_to(self.tuning_info)
     end
   end
@@ -237,3 +239,14 @@
   In the next post, I'll take OO modeling to the next logical step of inheritance. The true utility of OO will become much clearer.
   
   I hope you've found the journey interesting so far--feedback is always welcome.
+
+-throw_content(:archived_comments) do
+  %h3 archived comments
+
+  .commentsblock
+    %ol.commenlist
+      %li
+        %cite Ben Askins says:
+        %br/
+        :plain
+          Nice intro Lachie, looking forward to you imparting more of your knowledge.

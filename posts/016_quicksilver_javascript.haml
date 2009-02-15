@@ -1,6 +1,8 @@
 -# title: quicksilver javascript
 -# slug: quicksilver-javascript
 -# published_at: 2008-02-11 10:32:00
+-# updated_at: 2008-09-01 18:05:39
+-# archived_comments: 2
 
 
 :textile
@@ -17,3 +19,19 @@
   "qs_score.js":http://rails-oceania.googlecode.com/svn/lachiecox/qs_score/trunk/qs_score.js
   
   "For example":http://smartbomb.com.au/qs_score/qs_score.html
+
+-throw_content(:archived_comments) do
+  %h3 archived comments
+
+  .commentsblock
+    %ol.commenlist
+      %li
+        %cite Lachlan Hardy says:
+        %br/
+        :plain
+          Dude! This is utterly fantastic.
+      %li.alt
+        %cite Pat says:
+        %br/
+        :plain
+          Very cool!
