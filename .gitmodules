@@ -1,0 +1,3 @@
+[submodule "lib/dirdb"]
+	path = lib/dirdb
+	url = git://github.com/lachie/dirdb.git
