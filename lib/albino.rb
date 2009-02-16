@@ -63,18 +63,30 @@ class Albino
   end
 
   def execute(command)
+    puts "command: #{command}"
     pid, stdin, stdout, stderr = Open4.popen4(command)
+
+    puts "reading stdin"
     stdin.puts @target
     stdin.close
+    puts "done reading stdin"
     
     
-    err = stderr.read
+    begin
+      err = stderr.read_nonblock(0)
+    rescue EAGAIN
+      puts "nothing on err"
+      err = nil
+    end
+    puts "done reading stderr"
     
     if err && !err.empty?
+      err += stderr.read
       puts "failed to convert using command #{command}"
       puts err
       "failed to convert: (#{command})"
     else
+      puts "reading stdout"
       stdout.read.strip
     end
   end
@@ -97,6 +109,7 @@ module Haml::Filters::Textile
     code       = ''
     non_code   = ''
     formatting = false
+    language   = nil
 
     new_text = ''
 
@@ -110,6 +123,7 @@ module Haml::Filters::Textile
           formatting = true
         else
           new_text << Albino.colorize( code, language, :O => 'linenos=table')
+          language = nil
           formatting = false
         end
 

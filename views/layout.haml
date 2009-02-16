@@ -10,11 +10,11 @@
       smartbomb
     
     %link{:type=>"text/css", :rel=>"stylesheet", :media=>"screen", :href=>"/main.css"}/
-    -#%link{:type=>"text/css", :rel=>"stylesheet", :media=>"screen", :href=>"/syntax.css"}/
+    %link{:type=>"text/css", :rel=>"stylesheet", :media=>"screen", :href=>"/syntax.css"}/
 
-    -# %script{:type=>"text/javascript", :src=>"/javascripts/jquery-1.2.1.js"}
     %link{:href=>"http://www.myopenid.com/server", :rel=>"openid.server"}/
     %link{:href=>"http://lachie.myopenid.com", :rel=>"openid.delegate"}/
+
     %link{:type=>"application/atom+xml", :title=>"ATOM", :rel=>"alternate", :href=>"http://feeds.feedburner.com/Smartbomb"}/
 
     -#= yield(:head)
@@ -34,17 +34,17 @@
           %input{:type=>"text", :id=>"q", :value=>"", :name=>"q"}
           %input{:type=>"hidden", :name=>:sitesearch, :value=>'http://smartbomb.com.au'}
         
-        %h2 Pages
+        %h2 Me
         %ul
-          -#-page_links_for_navigation.each do |link|
-          -#  %li= link_to(link.name, link.url)
-        -#-unless category_links_for_navigation.empty?
-        -#  %h2 Categories
-        -#  %ul
-        -#  -category_links_for_navigation.each do |link|
-        -#    %li= link_to(link.name, link.url)
+          %li
+            %a{:href=>'http://spiral.smartbomb.com.au'} spiral
+          %li
+            %a{:href=>'http://flickr.com/lachie'} flickr
+          %li
+            %a{:href=>'http://twitter.com/lachie'} twitter (public)
+          %li
+            %a{:href=>'http://last.fm/user/lachiec'} last.fm
             
-        -#= yield(:sidebar)
         =catch_content(:sidebar)
         
         %ul

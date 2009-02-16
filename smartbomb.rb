@@ -34,6 +34,14 @@ class Post < OpenStruct
   lookup :slugs do |article|
     article.slug
   end
+
+  def self.thunk_date(info,key)
+    info[key] = if info[key]
+                  DateTime.parse(info[key])
+                else
+                  yield
+                end
+  end
   
   def self.scan_file(path)
     info = {}
@@ -43,11 +51,8 @@ class Post < OpenStruct
       end
     end
 
-    pt = info[:published_at] = if info[:published_at]
-      DateTime.parse(info[:published_at])
-    else
-      File.ctime(path)
-    end
+    pt = thunk_date(info,:published_at) { File.ctime(path) }
+    thunk_date(info,:updated_at  ) { File.mtime(path) }
 
     info[:url] = "/%04d/%02d/%s" % [ pt.year,pt.month,info[:slug] ]
     
