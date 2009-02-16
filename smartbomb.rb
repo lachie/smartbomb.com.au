@@ -1,6 +1,5 @@
 require 'rubygems'
 
-gem 'sinatra', '~> 0.3'
 gem 'haml', '~> 2.0'
 
 require 'sinatra'
@@ -12,7 +11,7 @@ require 'haml'
 
 
 __DIR__ = File.dirname(__FILE__)
-require __DIR__+'/lib/dirdb/dirdb'
+require __DIR__+'/lib/dirdb/lib/dirdb'
 require 'ostruct'
 require 'pp'
 

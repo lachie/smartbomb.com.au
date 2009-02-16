@@ -1,15 +1,10 @@
 require 'rubygems'
-require 'sinatra'
+gem 'sinatra', '~> 0.9' 
+require './smartbomb'
 
-root_dir = File.dirname(__FILE__)
+set :run, false
+set :environment, :production
+run Sinatra::Application
 
-Sinatra::Application.default_options.merge!(
-  :views    => File.join(root_dir, 'views'),
-  :app_file => File.join(root_dir, 'smartbomb.rb'),
-  :run => false,
-  :env => ENV['RACK_ENV'].to_sym
-)
-
-run Sinatra.application
 
 # vim: ft=ruby
