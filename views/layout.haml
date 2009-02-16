@@ -37,6 +37,8 @@
         %h2 Me
         %ul
           %li
+            %a{:href=>'http://smartbomb.com.au'} smartbomb
+          %li
             %a{:href=>'http://spiral.smartbomb.com.au'} spiral
           %li
             %a{:href=>'http://flickr.com/lachie'} flickr
@@ -48,6 +50,16 @@
           %li
             %a{:href=>'http://last.fm/user/lachiec'} last.fm
             
+        -if @posts
+          %h2 Recent
+          %ul
+            -@posts.each do |post|
+              %li
+                %small
+                  =post.published_at.strftime('%d %b %y')
+                %a{:href=>post.url}=post.title
+            %li
+              %a{:href=>'/archives'} more posts...
         =catch_content(:sidebar)
         
         %ul

@@ -3,6 +3,6 @@
 -@months.reverse.each do |(date,key)|
   %h3=date.strftime("%B %Y")
   %ul
-    -@posts[key].each do |post|
+    -@archived_posts[key].each do |post|
       %li
         %a{:href => post.url}=post.title

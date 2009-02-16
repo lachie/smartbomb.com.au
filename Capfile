@@ -22,4 +22,10 @@ namespace :deploy do
           "ln -s #{shared_path}/tmp #{latest_release}/tmp"
         ] * ' && '
   end
+  task(:start) { ; }
+  task(:stop) { ; }
+  task :restart do
+    run "touch #{current_path}/tmp/restart.txt"
+  end
+ 
 end
