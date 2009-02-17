@@ -4,12 +4,11 @@ gem 'haml', '~> 2.0'
 
 require 'sinatra'
 require 'haml'
-
-__DIR__ = File.dirname(__FILE__)
-require __DIR__+'/lib/dirdb/lib/dirdb'
 require 'ostruct'
 require 'pp'
 
+__DIR__ = File.dirname(__FILE__)
+require __DIR__+'/lib/dirdb/lib/dirdb'
 require __DIR__+'/lib/albino'
 
 class Post < OpenStruct

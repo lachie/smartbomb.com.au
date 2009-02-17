@@ -105,6 +105,8 @@ end
 
 
 module Haml::Filters::Textile
+  DELIM_RE = %r[^----*(.*)$]
+
   def render_with_pygments(text)
     code       = ''
     non_code   = ''
@@ -115,15 +117,16 @@ module Haml::Filters::Textile
 
     text.each do |line|
 
-      if line[/^----*(.*)$/]
+      if line[DELIM_RE]
         if !formatting
           language = $1.strip
 
           new_text << render_without_pygments(non_code)
           formatting = true
         else
-          new_text << Albino.colorize( code, language, :O => 'linenos=table')
           language = nil
+
+          new_text << Albino.colorize( code, language, :O => 'linenos=table')
           formatting = false
         end
 
