@@ -3,10 +3,11 @@
 
 =catch_content(:archived_comments)
 
-:javascript
-  var idcomments_acct = '7afed296a639a451a3f22b9175139517';
-  var idcomments_post_id;
-  var idcomments_post_url;
-%span#IDCommentsPostTitle{:style=>"display:none"}
-%script{:type=>'text/javascript', :src=>'http://www.intensedebate.com/js/genericCommentWrapperV2.js'}
-
+#disqus_thread
+%script{:type=>"text/javascript", :src=>"http://disqus.com/forums/smartbomb-au/embed.js"}
+%noscript
+  %a{:href=>"http://smartbomb-au.disqus.com/?url=ref"}
+    View the discussion thread.
+  %a.dsq-brlink{:href=>"http://disqus.com"}
+    blog comments powered by
+    %span.logo-disqus Disqus

@@ -20,11 +20,5 @@
     %a{:href => "http://smartbomb.com.au#{post.url}"}
       = post.archived_comments
       archived comments
-    
 
-  :javascript
-    var idcomments_acct = '7afed296a639a451a3f22b9175139517';
-    var idcomments_post_id; // = '#{post.slug}';
-    var idcomments_post_url = 'http://smartbomb.com.au#{post.url}';
-  %script{:type=>"text/javascript", :src=>"http://www.intensedebate.com/js/genericLinkWrapperV2.js"}
-  
+  %a{:href => "http://smartbomb.com.au#{post.url}#disqus_thread"} Comments
