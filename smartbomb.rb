@@ -6,6 +6,8 @@ require 'sinatra'
 require 'haml'
 require 'ostruct'
 require 'pp'
+    
+
 
 __DIR__ = File.dirname(__FILE__)
 require __DIR__+'/lib/dirdb/lib/dirdb'
