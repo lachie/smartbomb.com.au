@@ -11,6 +11,31 @@ __DIR__ = File.dirname(__FILE__)
 require __DIR__+'/lib/dirdb/lib/dirdb'
 require __DIR__+'/lib/albino'
 
+# pinched from AS
+class << Time
+  def time_with_datetime_fallback(utc_or_local, year, month=1, day=1, hour=0, min=0, sec=0, usec=0)
+    ::Time.send(utc_or_local, year, month, day, hour, min, sec, usec)
+  rescue
+    offset = utc_or_local.to_sym == :local ? ::DateTime.local_offset : 0
+    ::DateTime.civil(year, month, day, hour, min, sec, offset)
+  end
+
+  # Wraps class method +time_with_datetime_fallback+ with +utc_or_local+ set to <tt>:utc</tt>.
+  def utc_time(*args)
+    time_with_datetime_fallback(:utc, *args)
+  end
+
+  # Wraps class method +time_with_datetime_fallback+ with +utc_or_local+ set to <tt>:local</tt>.
+  def local_time(*args)
+    time_with_datetime_fallback(:local, *args)
+  end
+end
+class DateTime
+  def to_time
+    self.offset == 0 ? ::Time.utc_time(year, month, day, hour, min, sec) : self
+  end
+end
+
 class Post < OpenStruct
   include DirDB::Resource
   
@@ -21,6 +46,9 @@ class Post < OpenStruct
   end
 
   index :by_published_at do |post|
+    puts "post: #{post}"
+    puts "by published at ... #{post.published_at.inspect}"
+    puts 
     post.published_at
   end
   
@@ -30,7 +58,7 @@ class Post < OpenStruct
 
   def self.thunk_date(info,key)
     info[key] = if info[key]
-                  DateTime.parse(info[key])
+                  DateTime.parse(info[key]).to_time
                 else
                   yield
                 end
