@@ -72,6 +72,11 @@ class Post < OpenStruct
       end
     end
 
+    raise "no title for #{path}" unless info[:title]
+    unless info[:slug]
+      info[:slug] = info[:title].gsub(/[-_\s]+/,'-')
+    end
+
     pt = thunk_date(info,:published_at) { File.ctime(path) }
          thunk_date(info,:updated_at  ) { File.mtime(path) }
 
