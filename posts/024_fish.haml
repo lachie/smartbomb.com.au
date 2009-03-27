@@ -1,0 +1,113 @@
+-# title: Fish
+-# slug: fish
+-# published_at: 2009-02-17 13:55:00
+
+:textile
+  Fish is an awesome shell.
+  It provides an expressive language and environment that allows me to extend my operating system into a razor-honed über-ide.
+
+  I can either ease personal pain points as they arise, or mix and match the best of other people's solutions (github dotfiles ftw).
+
+  The rest of this post is a grab-bag of little solutions I've built or adapted.
+
+  h2. s & c
+
+  All over the place I've seen people create an alias for the rails command @script/server@.
+
+  I thought it was a good idea, but I'm not partial to rails-as-monoculture; my apps use rails, merb or sinatra.
+
+  In fish I've found it much easier to abstract things into reusable functions. Having one function per file is a bit annoying, but its doable.
+
+  Following the fish convention, private functions have a double underscore; here's @__detect_webapp@ which examines CWD to try and determine what kind of app we're in:
+
+  --- fish
+  function __detect_webapp
+    if __sinatra_app > /dev/null
+      echo sinatra
+      return
+    end
+
+    if test -d 'script'
+      echo rails
+      return
+    end
+
+    if test -d 'config'
+      if test -d 'bin'
+        echo merb_bundle
+      else
+        echo merb
+      end
+
+      return
+    end
+    
+    echo "unknown"
+  end
+  ---
+
+  Now, the "start web app script" (@s@) is very focused on the task of starting apps (as opposed to determining what kind of app to start):
+
+  --- fish
+  function s
+    switch (__detect_webapp)
+      case rails
+        ./script/server $argv
+      case sinatra
+        ruby (__sinatra_app)
+      case merb_bundle
+        ./bin/merb $argv
+      case merb
+        merb $argv
+      case '*'
+        echo "doesn't look like you're in a web app!"
+    end
+  end
+  ---
+
+  Starting a console with the web app context loaded (@c@):
+  --- fish
+  function c
+    switch (__detect_webapp)
+      case rails
+        ./script/console $argv
+      case sinatra
+        irb -r (__sinatra_app)
+      case merb_bundle
+        ./bin/merb -i $argv
+      case merb
+        merb -i $argv
+      case '*'
+        echo "doesn't look like you're in a web app... using plain ol' irb"
+        irb
+    end
+  end
+  ---
+  h2. project
+
+  Agility in jumping 'round projects is vitally important to my sanity. I tried a lot of approaches to the problem of identifying the root of a project.
+  As usual, the simplest turned out to be the best:
+
+  # find all directories containing a directory called @.git@
+
+  The list of .git-holding directories is used for both completion and changing directory.
+
+  h2. pg
+
+  The next pain point I identified was selecting databases when using the commandline tools.
+
+  A semi-common workflow is
+
+  --- bash
+  $ dropdb foo_development
+  $ createdb foo_development
+  $ rake db:migrate
+  ---
+
+  For this reason, the fish completion also invokes a ruby script which parses the database.yml of any web app we're inside.
+
+  h1. outstanding annoyances
+
+  h2. git completion
+
+  The one I found doesn't work. The bash one which comes with macports was really good.
